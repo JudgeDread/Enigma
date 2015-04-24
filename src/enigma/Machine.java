@@ -134,7 +134,7 @@ public class Machine {
             config.get(i).setCurrentPostion(0);
         }
         //override
-        config.get(2).setCurrentPostion(21);
+        config.get(2).setCurrentPostion(0);
         //displayRotorConfig();
     }
     

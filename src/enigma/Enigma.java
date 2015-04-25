@@ -78,65 +78,65 @@ public class Enigma {
         //set ring settings (AAA) AAA
 //        enigmaOne.configRotorRing();
         enigmaOne.defaultRotorRing();
-                //set ground setting AAA (AAA)
+        //set ground setting AAA (AAA)
 //        enigmaOne.configRotorGround();
         enigmaOne.defaultRotorGround();
         //breaks at 3478 double step        
-        for(int i = 0; i < 1; i++){
-            enigmaOne.stepOffset();
-            System.out.println(enigmaOne.encrypt_test('A'));
-        }
+////        for(int i = 0; i < 25; i++){
+////            enigmaOne.stepOffset();
+////            System.out.println(enigmaOne.encrypt_test('A'));
+////        }
 //Decrypting test
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('B')); //1
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('D'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('Z'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('G'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('O'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('W'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('C'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('X'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('L'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('T')); //10
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('K'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('S'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('B'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('T'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('M')); //15
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('C'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('D'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('L'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('P'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('B')); //20
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('M')); //fails
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('Y'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('K'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('C'));
-////            enigmaOne.stepOffset();
-////            System.out.println(enigmaOne.encrypt_test('G')); //25
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('B')); //1
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('D'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('Z'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('G'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('O'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('W'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('C'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('X'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('L'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('T')); //10
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('K'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('S'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('B'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('T'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('M')); //15
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('C'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('D'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('L'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('P'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('B')); //20
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('M')); 
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('U')); //fails
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('Q'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('O'));
+            enigmaOne.stepOffset();
+            System.out.println(enigmaOne.encrypt_test('F')); //25
         
         
         }

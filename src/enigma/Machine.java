@@ -350,9 +350,9 @@ public class Machine {
             int temp = 0;
                 try{
                     //temp = (charIndex - config.get(i).getCurrentPostion() - config.get(i).getCurrentPostion() + 78) % 26;
-                    temp = (charIndex + config.get(i).getCurrentPostion() + 26) % 26;
+                    temp = (charIndex + 26) % 26;
                     encrypted = config.get(i).getInvertedSequence()[temp];
-                    charIndex = encrypted - (int)'A';
+                    charIndex = encrypted - (int)'A' - config.get(i).getCurrentPostion();
                     
                     System.out.println("Debug: " + encrypted + " Rotor: " + i + " Current position: " + config.get(i).getCurrentPostion());
                 }catch(java.lang.ArrayIndexOutOfBoundsException e){
@@ -366,7 +366,7 @@ public class Machine {
         //This works somehow, maybe the rotors are spinning the wrong way
         //Tried a fix needs more work reverded rotors
         char[] ref_ETW = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
-        encrypted = ref_ETW[(charIndex + config.get(2).getCurrentPostion() + 78) % 26];
+        encrypted = ref_ETW[(charIndex + 78) % 26];
         
         return encrypted;
     }

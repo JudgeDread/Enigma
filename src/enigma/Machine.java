@@ -241,13 +241,17 @@ public class Machine {
         config.get(2).stepOffset();
     }
     
-    public void encrypt(String unencrypted){
+    public String encrypt(String unencrypted){
         char[] tokens = unencrypted.toUpperCase().replaceAll("[^a-zA-Z]", "").toCharArray();
+        char[] encrypting = new char[tokens.length];
+        String encrypted;
         for(int i = 0; i < tokens.length; i++){
-            
+            encrypting[i] = encrypt_test(tokens[i]);
         }
+        encrypted = new String(encrypting);
+        return encrypted;
     }
-    
+    //obsolete
     public char passThrough(char unencrypted){
         int index = config.get(2).getCurrentPostion();
         char encrypted;
@@ -264,7 +268,7 @@ public class Machine {
         return encrypted;
     }
     //temp
-    
+    //obsolete
     public char encrypt_temp(char character){
         //test seq AAAAA > BDZGO
         //basic logic I II III ETW  A>E>S>G>C>D>F [plugboard swap if F is linked]
@@ -319,6 +323,7 @@ public class Machine {
         return encrypted;
     }
     
+    //seems to work
     public char encrypt_test(char character){
         //test seq AAAAA > BDZGO
         //A-(D-D-F)-S-(S-E-B)   
@@ -329,20 +334,22 @@ public class Machine {
         char encrypted = character;
         int charIndex = character - 'A';
         //changing entry point?
+        
+        stepOffset();
         for(int i = 2; i > -1; i--){
             encrypted = config.get(i).getSequence()[(charIndex + 26)% 26];
             charIndex = encrypted - (int)'A' - config.get(i).getCurrentPostion();
-            System.out.println("Debug: " + encrypted);
+//            System.out.println("Debug: " + encrypted);
         }
 //        <editor-fold>
         if(charIndex + reflector.getCurrentPostion() > 25){
             charIndex = charIndex - 25;
             encrypted = reflector.getSequence()[charIndex + reflector.getCurrentPostion()];
         }else{
-            encrypted = reflector.getSequence()[charIndex + reflector.getCurrentPostion()];
+            encrypted = reflector.getSequence()[(charIndex + reflector.getCurrentPostion() + 26) % 26];
         }
-        charIndex = encrypted - (int)'A' - reflector.getCurrentPostion();
-        System.out.println("Pass Reflector:" + encrypted);
+        charIndex = (encrypted - (int)'A' - reflector.getCurrentPostion() +26) %26;
+//        System.out.println("Pass Reflector:" + encrypted);
 //       </editor-fold> 
 
         for(int i = 0; i < 3; i++){
@@ -354,7 +361,7 @@ public class Machine {
                     encrypted = config.get(i).getInvertedSequence()[temp];
                     charIndex = encrypted - (int)'A' - config.get(i).getCurrentPostion();
                     
-                    System.out.println("Debug: " + encrypted + " Rotor: " + i + " Current position: " + config.get(i).getCurrentPostion());
+                //    System.out.println("Debug: " + encrypted + " Rotor: " + i + " Current position: " + config.get(i).getCurrentPostion());
                 }catch(java.lang.ArrayIndexOutOfBoundsException e){
                     System.out.println();
                     displayRotorConfig();

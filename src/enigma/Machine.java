@@ -135,6 +135,7 @@ public class Machine {
         }
         //override
         config.get(2).setCurrentPostion(0);
+        config.get(1).setCurrentPostion(0);
         //displayRotorConfig();
     }
     
@@ -215,25 +216,13 @@ public class Machine {
         return -1;
     }
     //steps the rotor to the next position
-    public void step(){
-        
-        if(config.get(2).getCurrentPostion() == config.get(2).getStepKey() || config.get(2).getCurrentPostion() == config.get(2).getStepKeySecondary()){
-                config.get(1).step(); 
-            }
-        if(config.get(1).getCurrentPostion() == config.get(1).getStepKey() || config.get(1).getCurrentPostion() == config.get(1).getStepKeySecondary()){
-                config.get(0).step();
-                config.get(1).step();
-            }
-        
-        config.get(2).step();
-    }
-    
+   
     public void stepOffset(){
         
         if(config.get(2).getCurrentPostion() == config.get(2).getStepKey() || config.get(2).getCurrentPostion() == config.get(2).getStepKeySecondary()){
                 config.get(1).stepOffset(); 
             }
-        if(config.get(1).getCurrentPostion() == config.get(1).getStepKey() || config.get(1).getCurrentPostion() == config.get(1).getStepKeySecondary()){
+        else if(config.get(1).getCurrentPostion() == config.get(1).getStepKey() || config.get(1).getCurrentPostion() == config.get(1).getStepKeySecondary()){
                 config.get(0).stepOffset();
                 config.get(1).stepOffset();
             }
@@ -249,77 +238,6 @@ public class Machine {
             encrypting[i] = encrypt_test(tokens[i]);
         }
         encrypted = new String(encrypting);
-        return encrypted;
-    }
-    //obsolete
-    public char passThrough(char unencrypted){
-        int index = config.get(2).getCurrentPostion();
-        char encrypted;
-        int uncharIndex = unencrypted - 65;
-        
-        
-        if(uncharIndex + index > 25){
-            uncharIndex = uncharIndex - 26;
-            encrypted = config.get(2).getSequence()[uncharIndex];
-        }else{
-            encrypted = config.get(2).getSequence()[uncharIndex + index];
-        }
-        
-        return encrypted;
-    }
-    //temp
-    //obsolete
-    public char encrypt_temp(char character){
-        //test seq AAAAA > BDZGO
-        //basic logic I II III ETW  A>E>S>G>C>D>F [plugboard swap if F is linked]
-        //           {0)(0)(0)      0>0>4>19>16>4 [plugboard swap]
-        //A-(D-D-F)-S-(S-E-B)   
-        //A-(F-K-N)-K-(B-J-D)
-        //A-(H-S-S)-F-(D-C-Z)
-        //A-(J-I-V)-W-(N-T-G)
-        //A-(L-R-U)-C-(Y-V-O)
-        char encrypted = character;
-        int charIndex = character - 'A';
-        //changing entry point?
-        for(int i = 2; i > -1; i--){
-            if((charIndex + config.get(i).getCurrentPostion()) > 25){
-                charIndex = charIndex - 25;
-                encrypted = config.get(i).getSequence()[charIndex + config.get(i).getCurrentPostion()];
-            }else{
-                encrypted = config.get(i).getSequence()[charIndex + config.get(i).getCurrentPostion()];
-            }
-            charIndex = encrypted - (int)'A' - config.get(i).getCurrentPostion();
-            System.out.println("Debug: " + encrypted);
-        }
-
-        if(charIndex + reflector.getCurrentPostion() > 25){
-            charIndex = charIndex - 25;
-            encrypted = reflector.getSequence()[charIndex + reflector.getCurrentPostion()];
-        }else{
-            encrypted = reflector.getSequence()[charIndex + reflector.getCurrentPostion()];
-        }
-        charIndex = encrypted - (int)'A' - reflector.getCurrentPostion();
-        System.out.println("Pass Reflector:" + encrypted);
-        
-
-        for(int i = 0; i < 3; i++){
-            //System.out.println(charIndex + config.get(i).getCurrentPostion());
-            if(charIndex + config.get(i).getCurrentPostion() > 25){
-                charIndex = charIndex - 25;
-                encrypted = config.get(i).getInvertedSequence()[charIndex + config.get(i).getCurrentPostion()];
-            }else if(charIndex - config.get(i).getCurrentPostion() < 0){
-                charIndex = charIndex + 25;
-                encrypted = config.get(i).getInvertedSequence()[charIndex - config.get(i).getCurrentPostion()];
-            }
-            else{
-                encrypted = config.get(i).getInvertedSequence()[charIndex - config.get(i).getCurrentPostion()];
-            }
-            charIndex = encrypted - (int)'A' - config.get(i).getCurrentPostion();
-            System.out.println("Debug: " + encrypted);
-        }
-       
-        
-        
         return encrypted;
     }
     
@@ -339,7 +257,8 @@ public class Machine {
         for(int i = 2; i > -1; i--){
             encrypted = config.get(i).getSequence()[(charIndex + 26)% 26];
             charIndex = encrypted - (int)'A' - config.get(i).getCurrentPostion();
-//            System.out.println("Debug: " + encrypted);
+            //System.out.println("Debug: " + encrypted);
+//            System.out.println("Debug: " + encrypted + " Rotor: " + i + " Current position: " + config.get(i).getCurrentPostion());
         }
 //        <editor-fold>
         if(charIndex + reflector.getCurrentPostion() > 25){
@@ -361,7 +280,8 @@ public class Machine {
                     encrypted = config.get(i).getInvertedSequence()[temp];
                     charIndex = encrypted - (int)'A' - config.get(i).getCurrentPostion();
                     
-                //    System.out.println("Debug: " + encrypted + " Rotor: " + i + " Current position: " + config.get(i).getCurrentPostion());
+                    //System.out.println("Debug: " + encrypted + " Rotor: " + i + " Current position: " + config.get(i).getCurrentPostion());
+//                    System.out.println("Debug: " + encrypted);
                 }catch(java.lang.ArrayIndexOutOfBoundsException e){
                     System.out.println();
                     displayRotorConfig();
@@ -373,8 +293,12 @@ public class Machine {
         //This works somehow, maybe the rotors are spinning the wrong way
         //Tried a fix needs more work reverded rotors
         char[] ref_ETW = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+        
         encrypted = ref_ETW[(charIndex + 78) % 26];
         
+ //       System.out.println();
+ //       System.out.println("Output: " + encrypted);
+ //       System.out.println();
         return encrypted;
     }
     

@@ -26,7 +26,7 @@ public class Machine {
     List<Rotor> reflectors;
     Rotor reflector;
     List<Rotor> config = new ArrayList<>();
-    List<String> plugboard;
+    char[] plugboard;
     
     public Machine(String m_name, List<Rotor> all_rotors, List<Rotor> all_reflectors, int max_rotor_config){
         name = m_name;
@@ -42,11 +42,36 @@ public class Machine {
     public List<Rotor> getConfig(){
         return config;
     } 
+    
+    //plugboard configuration
+    public void configPlugboard(){
+        String rawInput;
+        String cleanInput;
+        String[] pairs;
+        String[] temp;
+        Scanner in = new Scanner(System.in);
+        plugboard = new char[] {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+        
+        System.out.println("Please enter 10 or less letters to be paired (Example A:C):");
+        rawInput = in.nextLine();
+        cleanInput = rawInput.toUpperCase().replaceAll("[^a-zA-Z: ]", "");
+        //filter into char:char pairings
+        pairs = cleanInput.split(" ");
+        for (String pair : pairs) {
+            temp = pair.split(":");
+            System.out.println(temp);
+            //find value of char in temp, find set value of char temp[1] to
+
+            plugboard[temp[0].charAt(0) - 65] = temp[1].charAt(0);
+            plugboard[temp[1].charAt(0) - 65] = temp[0].charAt(0);
+        }
+        System.out.println(plugboard.toString());
+        //take value of pair and place them in plugboard array
+        
+        
+    }
     //fix var names
     //clean up
-    //check for doubles [X]
-    // run three/four times depending on machine (var name max_rotors) [X]
-    //set reflectors
     public void selectRotors(){
         displayRotors();
         String choice;
@@ -235,21 +260,21 @@ public class Machine {
         char[] encrypting = new char[tokens.length];
         String encrypted;
         for(int i = 0; i < tokens.length; i++){
-            encrypting[i] = encrypt_test(tokens[i]);
+            encrypting[i] = encryptChar(tokens[i]);
         }
         encrypted = new String(encrypting);
         return encrypted;
     }
     
     //seems to work
-    public char encrypt_test(char character){
+    public char encryptChar(char character){
         //test seq AAAAA > BDZGO
         //A-(D-D-F)-S-(S-E-B)   
         //A-(F-K-N)-K-(B-J-D)
         //A-(H-S-S)-F-(D-C-Z)
         //A-(J-I-V)-W-(N-T-G)
         //A-(L-R-U)-C-(Y-V-O)
-        char encrypted = character;
+        char encrypted;
         int charIndex = character - 'A';
         //changing entry point?
         
@@ -274,20 +299,11 @@ public class Machine {
         for(int i = 0; i < 3; i++){
             //System.out.println(charIndex + config.get(i).getCurrentPostion());
             int temp = 0;
-                try{
-                    //temp = (charIndex - config.get(i).getCurrentPostion() - config.get(i).getCurrentPostion() + 78) % 26;
                     temp = (charIndex + 26) % 26;
                     encrypted = config.get(i).getInvertedSequence()[temp];
-                    charIndex = encrypted - (int)'A' - config.get(i).getCurrentPostion();
-                    
+                    charIndex = encrypted - (int)'A' - config.get(i).getCurrentPostion();                    
                     //System.out.println("Debug: " + encrypted + " Rotor: " + i + " Current position: " + config.get(i).getCurrentPostion());
 //                    System.out.println("Debug: " + encrypted);
-                }catch(java.lang.ArrayIndexOutOfBoundsException e){
-                    System.out.println();
-                    displayRotorConfig();
-                    System.out.println("This broke: " + temp);
-                    System.out.println();
-                }
             }
         
         //This works somehow, maybe the rotors are spinning the wrong way

@@ -7,8 +7,12 @@
 package enigma;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -26,7 +30,7 @@ public class Machine {
     List<Rotor> reflectors;
     Rotor reflector;
     List<Rotor> config = new ArrayList<>();
-    char[] plugboard;
+    char[] plugboard = new char[] {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
     
     public Machine(String m_name, List<Rotor> all_rotors, List<Rotor> all_reflectors, int max_rotor_config){
         name = m_name;
@@ -47,25 +51,53 @@ public class Machine {
     public void configPlugboard(){
         String rawInput;
         String cleanInput;
-        String[] pairs;
+//        String[] pairs;
+        List<String> pairs;
         String[] temp;
         Scanner in = new Scanner(System.in);
-        plugboard = new char[] {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
         
         System.out.println("Please enter 10 or less letters to be paired (Example A:C):");
         rawInput = in.nextLine();
+        //rawInput = "B:O B:D D:G AA:B @:r E:QQ" ;
+        
+        //remove all unwanted characters
         cleanInput = rawInput.toUpperCase().replaceAll("[^a-zA-Z: ]", "");
+        
         //filter into char:char pairings
-        pairs = cleanInput.split(" ");
+        pairs = new ArrayList(Arrays.asList(cleanInput.split(" ")));
+        
+        //move to a collection and back to list if duplicates are found
+        Set<String> duplicates = new HashSet<>(pairs);
+        if(duplicates.size() < pairs.size()){
+            pairs.clear();
+            pairs.addAll(duplicates);
+        }
+        
+        //remove incorrectly formatted pairs
+        for (Iterator<String> it = pairs.iterator(); it.hasNext();) {
+            String pair = it.next();
+            if(!pair.toUpperCase().matches("[A-Z]{1}:[A-Z]{1}")){
+                System.out.println("Entry " + pair + " was invalid");
+                it.remove();
+            }
+        }
+        
+        //insert into plugboard and checks to make sure a letter isn't reused
         for (String pair : pairs) {
             temp = pair.split(":");
-            System.out.println(temp);
             //find value of char in temp, find set value of char temp[1] to
-
-            plugboard[temp[0].charAt(0) - 65] = temp[1].charAt(0);
-            plugboard[temp[1].charAt(0) - 65] = temp[0].charAt(0);
+            //65 == 'A'
+            //check to see if values have been changed
+            if(plugboard[temp[0].charAt(0) - 65] == temp[0].charAt(0) && plugboard[temp[1].charAt(0) - 65] == temp[1].charAt(0)){
+                plugboard[temp[0].charAt(0) - 65] = temp[1].charAt(0);
+                plugboard[temp[1].charAt(0) - 65] = temp[0].charAt(0);
+            }else if(plugboard[temp[0].charAt(0) - 65] != temp[0].charAt(0)){
+                System.out.println("Value " + temp[0] + " was already modified");
+            }else if(plugboard[temp[1].charAt(0) - 65] != temp[1].charAt(0)){
+                System.out.println("Value " + temp[1] + " was already modified");
+            }
+            
         }
-        System.out.println(plugboard.toString());
         //take value of pair and place them in plugboard array
         
         
@@ -279,6 +311,11 @@ public class Machine {
         //changing entry point?
         
         stepOffset();
+        
+        //plugboard entry
+        encrypted = plugboard[(charIndex + 26)% 26];
+        charIndex = encrypted - (int)'A';
+        
         for(int i = 2; i > -1; i--){
             encrypted = config.get(i).getSequence()[(charIndex + 26)% 26];
             charIndex = encrypted - (int)'A' - config.get(i).getCurrentPostion();
@@ -306,15 +343,15 @@ public class Machine {
 //                    System.out.println("Debug: " + encrypted);
             }
         
-        //This works somehow, maybe the rotors are spinning the wrong way
-        //Tried a fix needs more work reverded rotors
+
         char[] ref_ETW = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
         
         encrypted = ref_ETW[(charIndex + 78) % 26];
+        charIndex = encrypted - (int)'A';
         
- //       System.out.println();
- //       System.out.println("Output: " + encrypted);
- //       System.out.println();
+        //plugboard exit
+        encrypted = plugboard[(charIndex + 26)% 26];
+
         return encrypted;
     }
     
